@@ -29,6 +29,7 @@ import jenkins.scm.api.SCMHead;
 
 public class GitRefSCMHead extends SCMHead implements GitSCMHeadMixin {
     private final String ref;
+    private final long timestamp;
 
     /**
      * Constructor.
@@ -36,9 +37,10 @@ public class GitRefSCMHead extends SCMHead implements GitSCMHeadMixin {
      * @param name the name of the ref.
      * @param ref the ref.
      */
-    public GitRefSCMHead(@NonNull String name, @NonNull String ref) {
+    public GitRefSCMHead(@NonNull String name, @NonNull String ref, long timestamp) {
         super(name);
         this.ref = ref;
+        this.timestamp = timestamp;
     }
 
     /**
@@ -53,6 +55,14 @@ public class GitRefSCMHead extends SCMHead implements GitSCMHeadMixin {
     @Override
     public String getRef() {
         return ref;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getTimestamp() {
+        return timestamp;
     }
 
     @Override

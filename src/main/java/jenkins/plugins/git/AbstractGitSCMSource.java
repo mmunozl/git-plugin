@@ -619,7 +619,7 @@ public abstract class AbstractGitSCMSource extends SCMSource {
                             continue;
                         }
                         count++;
-                        if (request.process(new GitRefSCMHead(refName, ref.getKey()),
+                        if (request.process(new GitRefSCMHead(refName, ref.getKey()), // ----------------------------------------------------------------------------------------------------------------------------------
                                 new SCMSourceRequest.IntermediateLambda<ObjectId>() {
                                     @Nullable
                                     @Override
@@ -680,7 +680,7 @@ public abstract class AbstractGitSCMSource extends SCMSource {
                     }
                     count++;
                     final String branchName = StringUtils.removeStart(ref.getKey(), Constants.R_HEADS);
-                    if (request.process(new GitBranchSCMHead(branchName),
+                    if (request.process(new GitBranchSCMHead(branchName), // ----------------------------------------------------------------------------------------------------------------------------------
                             new SCMSourceRequest.IntermediateLambda<ObjectId>() {
                                 @Nullable
                                 @Override
@@ -855,7 +855,7 @@ public abstract class AbstractGitSCMSource extends SCMSource {
             if (name.equals(Constants.R_HEADS + revision)) {
                 listener.getLogger().printf("Found match: %s revision %s%n", name, rev);
                 // WIN!
-                return new GitBranchSCMRevision(new GitBranchSCMHead(revision), rev);
+                return new GitBranchSCMRevision(new GitBranchSCMHead(revision), rev); // ----------------------------------------------------------------------------------------------------------------------------------
             }
             if (name.equals(Constants.R_TAGS+revision)) {
                 listener.getLogger().printf("Found match: %s revision %s%n", name, rev);
@@ -869,7 +869,14 @@ public abstract class AbstractGitSCMSource extends SCMSource {
             if (name.startsWith(Constants.R_HEADS) && revision.equalsIgnoreCase(rev)) {
                 listener.getLogger().printf("Found match: %s revision %s%n", name, rev);
                 // WIN!
-                return new GitBranchSCMRevision(new GitBranchSCMHead(StringUtils.removeStart(name, Constants.R_HEADS)), rev);
+
+                final Repository repository = client.getRepository();
+                RevWalk walk = new RevWalk(repository);
+                ObjectId ref = client.revParse(rev);
+                RevCommit commit = walk.parseCommit(ref);
+                long lastModified = TimeUnit.SECONDS.toMillis(commit.getCommitTime());
+
+                return new GitBranchSCMRevision(new GitBranchSCMHead(StringUtils.removeStart(name, Constants.R_HEADS), lastModified), rev);
             }
             if (name.startsWith(Constants.R_TAGS) && revision.equalsIgnoreCase(rev)) {
                 listener.getLogger().printf("Candidate match: %s revision %s%n", name, rev);
@@ -929,7 +936,7 @@ public abstract class AbstractGitSCMSource extends SCMSource {
                 if (name.startsWith(Constants.R_HEADS)) {
                     listener.getLogger().printf("Selected match: %s revision %s%n", name, shortHashMatch);
                     // WIN it's also a branch
-                    return new GitBranchSCMRevision(new GitBranchSCMHead(StringUtils.removeStart(name, Constants.R_HEADS)),
+                    return new GitBranchSCMRevision(new GitBranchSCMHead(StringUtils.removeStart(name, Constants.R_HEADS)), // ----------------------------------------------------------------------------------------------------------------------------------
                             shortHashMatch);
                 } else if (name.startsWith(Constants.R_TAGS)) {
                     tagName = StringUtils.removeStart(name, Constants.R_TAGS);
@@ -1009,7 +1016,7 @@ public abstract class AbstractGitSCMSource extends SCMSource {
                                       }
                                       listener.getLogger()
                                               .printf("Selected match: %s revision %s%n", name, hash);
-                                      return new GitBranchSCMRevision(new GitBranchSCMHead(name), hash);
+                                      return new GitBranchSCMRevision(new GitBranchSCMHead(name), hash); // ----------------------------------------------------------------------------------------------------------------------------------
                                   } catch (GitException x) {
                                       x.printStackTrace(listener.error("Could not resolve %s", revision));
                                       return null;

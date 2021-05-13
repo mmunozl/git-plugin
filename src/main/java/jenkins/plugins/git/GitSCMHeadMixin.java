@@ -33,4 +33,5 @@ public interface GitSCMHeadMixin extends SCMHeadMixin {
      * @return the ref
      */
     String getRef(); // TODO provide a default implementation once Java 8 baseline
+    long getTimestamp();
 }

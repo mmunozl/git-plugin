@@ -34,13 +34,15 @@ import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 
 public class GitBranchSCMHead extends SCMHead implements GitSCMHeadMixin {
+    private final long timestamp;
     /**
      * Constructor.
      *
      * @param name the name.
      */
-    public GitBranchSCMHead(@NonNull String name) {
+    public GitBranchSCMHead(@NonNull String name, long timestamp) {
         super(name);
+        this.timestamp = timestamp;
     }
 
     @Override
