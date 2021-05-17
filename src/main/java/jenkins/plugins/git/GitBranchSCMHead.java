@@ -39,15 +39,32 @@ public class GitBranchSCMHead extends SCMHead implements GitSCMHeadMixin {
      * Constructor.
      *
      * @param name the name.
+     * @param timestamp last modification.
      */
     public GitBranchSCMHead(@NonNull String name, long timestamp) {
         super(name);
         this.timestamp = timestamp;
     }
 
+
+    /**
+     * Constructor.
+     *
+     * @param name the name.
+     */
+    public GitBranchSCMHead(@NonNull String name) {
+        super(name);
+        this.timestamp = 0L;
+    }
+
     @Override
     public final String getRef() {
         return Constants.R_HEADS + getName();
+    }
+
+    @Override
+    public long getTimestamp() {
+        return timestamp;
     }
 
     @Override

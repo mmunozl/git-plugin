@@ -27,6 +27,7 @@ package jenkins.plugins.git;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import jenkins.scm.api.SCMHead;
 
+
 public class GitRefSCMHead extends SCMHead implements GitSCMHeadMixin {
     private final String ref;
     private final long timestamp;
@@ -36,6 +37,19 @@ public class GitRefSCMHead extends SCMHead implements GitSCMHeadMixin {
      *
      * @param name the name of the ref.
      * @param ref the ref.
+     */
+    public GitRefSCMHead(@NonNull String name, @NonNull String ref) {
+        super(name);
+        this.ref = ref;
+        this.timestamp = 0L;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name the name of the ref.
+     * @param ref the ref.
+     * @param timestamp last modification of the ref.
      */
     public GitRefSCMHead(@NonNull String name, @NonNull String ref, long timestamp) {
         super(name);
